@@ -1,7 +1,9 @@
 {
     "name": "easycode/phalcon-api",
     "description": "Phalcon API Library",
-    "version": "3.0.0",
+   "type": "library",
+    "license": "MIT",
+    "version": "3.0.3",
     "require": {
         "php": ">=7.1",
         "ext-phalcon": ">=2.0.0"
