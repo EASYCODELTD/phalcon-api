@@ -17,8 +17,6 @@ class OptionsResponseMiddleware extends Plugin implements MiddlewareInterface
                 'result' => 'OK',
             ]);
 
-            $this->response->send();
-
             return false;
         }
     }

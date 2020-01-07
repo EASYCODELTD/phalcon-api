@@ -11,7 +11,7 @@ use PhalconApi\Mvc\Plugin;
 class CorsMiddleware extends Plugin implements MiddlewareInterface
 {
     static $ALL_ORIGINS = ['*'];
-    static $DEFAULT_HEADERS = ['Content-Type', 'X-Requested-With', 'Authorization', 'X-File-Name'];
+    static $DEFAULT_HEADERS = ['Content-Type', 'X-Requested-With', 'Authorization'];
 
     /**
      * @var array Allowed origins
@@ -133,14 +133,23 @@ class CorsMiddleware extends Plugin implements MiddlewareInterface
 
             if ($originDomain) {
 
-                $allowed = in_array($allowedOrigin, $this->_allowedOrigins);
+                $allowed = false;
 
-                if (false === $allowed) {
+                foreach ($this->_allowedOrigins as $allowedOrigin) {
+
+                    // First try exact domain
+                    if ($originDomain == $allowedOrigin) {
+
+                        $allowed = true;
+                        break;
+                    }
+
                     // Parse wildcards
                     $expression = '/^' . str_replace('\*', '(.+)', preg_quote($allowedOrigin, '/')) . '$/';
                     if (preg_match($expression, $originDomain) == 1) {
 
                         $allowed = true;
+                        break;
                     }
                 }
 

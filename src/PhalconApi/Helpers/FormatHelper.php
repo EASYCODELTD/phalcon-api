@@ -51,13 +51,19 @@ class FormatHelper
      *
      * @return null|string
      */
-    public function date($value)
+    public function date($value,$format=self::DEFAULT_DATE_FORMAT)
     {
         if ($value === null) {
             return null;
         }
 
         $date = new \DateTime(is_numeric($value) ? '@' . $value : $value);
-        return $date->format(self::DEFAULT_DATE_FORMAT);
+        return $date->format($format);
     }
+
+    function validateDate($date, $format = 'Y-m-d H:i:s')
+    { 
+        $d = \DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) == $date;
+    } 
 }

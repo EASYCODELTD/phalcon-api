@@ -13,6 +13,8 @@ class Exception extends \Exception
 
         $this->developerInfo = $developerInfo;
         $this->userInfo = $userInfo;
+        
+        error_log("EXCEPTION: ".$message.PHP_EOL);
     }
 
     public function getDeveloperInfo()

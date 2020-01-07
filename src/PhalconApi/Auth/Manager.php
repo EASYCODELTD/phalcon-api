@@ -102,14 +102,13 @@ class Manager extends \PhalconApi\Mvc\Plugin
     /**
      * @param string $accountTypeName
      * @param array $data
-     * @param int $sessionDuration
      *
      * @return Session Created session
      * @throws Exception
      *
      * Login a user with the specified account-type
      */
-    public function login($accountTypeName, array $data, $sessionDuration=null)
+    public function login($accountTypeName, array $data)
     {
         if (!$account = $this->getAccountType($accountTypeName)) {
 
@@ -120,13 +119,14 @@ class Manager extends \PhalconApi\Mvc\Plugin
 
         if (!$identity) {
 
-            throw new Exception(ErrorCodes::AUTH_LOGIN_FAILED);
+            throw new Exception(ErrorCodes::AUTH_LOGIN_FAILED,'Login failed',[
+                'data' => $data,
+            ]);
         }
 
         $startTime = time();
-        $duration = $sessionDuration ?: $this->sessionDuration;
 
-        $session = new Session($accountTypeName, $identity, $startTime, $startTime + $duration);
+        $session = new Session($accountTypeName, $identity, $startTime, $startTime + $this->sessionDuration);
         $token = $this->tokenParser->getToken($session);
         $session->setToken($token);
 
@@ -171,6 +171,8 @@ class Manager extends \PhalconApi\Mvc\Plugin
             return false;
         }
 
+        $this->session = $session;
+        
         if ($session->getExpirationTime() < time()) {
 
             throw new Exception(ErrorCodes::AUTH_SESSION_EXPIRED);

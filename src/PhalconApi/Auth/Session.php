@@ -30,6 +30,8 @@ class Session
         $this->startTime = $startTime;
         $this->expirationTime = $expirationTime;
         $this->token = $token;
+        
+        
     }
 
     public function getIdentity()

@@ -7,7 +7,6 @@ use PhalconApi\Constants\PostedDataMethods;
 class Request extends \Phalcon\Http\Request
 {
     protected $postedDataMethod = PostedDataMethods::AUTO;
-    protected $cachedPostedData = null;
 
     /**
      * @param string $method One of the method constants defined in PostedDataMethods
@@ -72,6 +71,15 @@ class Request extends \Phalcon\Http\Request
         return $this->postedDataMethod;
     }
 
+
+    
+    public function getPostedDataValue($name,$httpMethod = null)
+    {
+        $data = $this->getPostedData($httpMethod);
+        if(isset($data[$name])) return $data[$name];
+        return NULL;
+    }
+    
     /**
      * Returns the data posted by the client. This method uses the set postedDataMethod to collect the data.
      *
@@ -84,7 +92,7 @@ class Request extends \Phalcon\Http\Request
 
         if($method == PostedDataMethods::AUTO){
 
-            if (stristr($this->getContentType(), 'application/json') !== false) {
+            if ($this->getContentType() === 'application/json') {
                 $method = PostedDataMethods::JSON_BODY;
             }
             else if($this->isPost()){
@@ -112,30 +120,6 @@ class Request extends \Phalcon\Http\Request
         }
 
         return [];
-    }
-
-    /**
-     * Gets a variable from the posted data (getPostedData) applying filters if needed
-     * If no parameters are given the posted data is returned
-     *
-     * @param string $name
-     * @param mixed $filters
-     * @param mixed $defaultValue
-     * @param bool $notAllowEmpty
-     * @param bool $noRecursive
-     * @return mixed
-     */
-    public function getPosted($name = null, $filters = null, $defaultValue = null, $notAllowEmpty = false, $noRecursive = false){
-
-        if(!$this->cachedPostedData){
-            $this->cachedPostedData = $this->getPostedData();
-        }
-
-        if(!$this->cachedPostedData){
-            return null;
-        }
-
-        return $this->getHelper($this->cachedPostedData, $name, $filters, $defaultValue, $notAllowEmpty, $noRecursive);
     }
 
     /**

@@ -71,7 +71,7 @@ class UrlQueryParser
             }
         }
 
-        if ($where) {
+        if ($where && is_array($where) ) {
 
             foreach ($where as $field => $condition) {
 

@@ -58,8 +58,11 @@ class Response extends \Phalcon\Http\Response
         $this->setStatusCode($statusCode);
     }
 
-    public function setJsonContent($content, $jsonOptions = 0, $depth = 512)
+    public function setJsonContent($content, $jsonOptions = 0, $depth = 1024)
     {
+        
+        $jsonOptions = JSON_HEX_QUOT | JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT;
+        
         parent::setJsonContent($content, $jsonOptions, $depth);
 
         $this->setContentType('application/json', 'UTF-8');
