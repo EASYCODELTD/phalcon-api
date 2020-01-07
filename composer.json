@@ -3,7 +3,6 @@
     "description": "Phalcon API Library",
    "type": "library",
     "license": "MIT",
-    "version": "3.0.3",
     "require": {
         "php": ">=7.1",
         "ext-phalcon": ">=2.0.0"
